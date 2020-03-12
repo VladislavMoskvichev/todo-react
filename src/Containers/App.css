@@ -1,0 +1,59 @@
+.App {
+  text-align: center;
+  margin: 30px 0;
+  width: 500px;
+  height: auto;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+form {
+  max-width: 500px;
+}
+
+.todoList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.push-btn {
+  padding: 0 15px;
+  height: 30px;
+  background: gold;
+}
+
+.push-btn:hover {
+  background: #ffed48;
+}
+
+.push-btn:active {
+  background: gold;
+}
+
+.put {
+  padding: 0 7px;
+  background: #d8f3ff;
+  width: 300px;
+  height: 30px;
+}
+
+.todo {
+  display: flex;
+  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+  background: skyblue;
+  margin: 5px;
+  width: 360px;
+}
+
+
+
+

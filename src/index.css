@@ -5,6 +5,27 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style-type: none;
+}
+
+button {
+  border: none;
+  outline: none;
+}
+
+input {
+  border: none;
+  outline: none;
 }
 
 code {
