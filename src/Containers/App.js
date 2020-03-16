@@ -1,46 +1,48 @@
 import React, {Component} from "react";
 import './App.css';
 import {connect} from "react-redux";
-import {addTodo} from "../actions/addTodoAction";
-import {toggleTodo} from "../actions/toggleTodoAction";
 import TodoCollection from "../Components/TodoCollection";
+import {addTodoAction, deleteTodoAction, loadTodosAction} from "../actions/actionCreators";
 
 class App extends Component {
-
-    clickHandleChange = e => {
+    onHandleSubmit = e => {
         e.preventDefault();
-        this.props.addTodo(this.props.todos.text);
+        this.props.addTodoAction(this.props.todos.text);
+        this.props.loadTodosAction()
     };
 
     getText = e => {
         this.props.todos.text = e.currentTarget.value;
+        console.log(this.props.todos.text);
     };
 
     render() {
-        const {todos, addTodo, toggleTodo} = this.props;
         return (
             <div className="App">
-                <h1>TODO APP</h1>
-                <form onSubmit={ this.clickHandleChange }>
-                    <input value={todos.text} onChange={ this.getText } className="put" type="text"/>
-                    <button className="push-btn">Push</button>
+                <form onSubmit={this.onHandleSubmit}>
+                    <input onChange={this.getText} className="put" type="text"/>
+                    <button>ADD TODO</button>
                 </form>
-                {todos.length > 0 ? <TodoCollection todos={todos} addTodo={addTodo} toggleTodo={toggleTodo}/> : <p>Список пуст</p>}
+                <TodoCollection todos={this.props.todos}
+                                deleteTodo={this.props.deleteTodoAction}
+                                loadTodos={this.props.loadTodosAction}
+                />
             </div>
         );
     }
 }
 
 const mapStateToProps = store => {
+    console.log(store);
     return {
-        todos: store.todos
+        todos: store.todos,
     }
 };
-
 const mapDispatchToProps = dispatch => {
     return {
-        addTodo: text => dispatch(addTodo(text)),
-        toggleTodo: id => dispatch(toggleTodo(id))
+        loadTodosAction: () => dispatch(loadTodosAction()),
+        addTodoAction: text => dispatch(addTodoAction(text)),
+        deleteTodoAction: id => dispatch(deleteTodoAction(id)),
     }
 };
 
