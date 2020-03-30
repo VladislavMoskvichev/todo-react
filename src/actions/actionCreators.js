@@ -1,46 +1,56 @@
 import axios from "axios";
+import {url} from "../constants";
+import {deleteTodo, deleteTodoStarted} from "./deleteTodoAction";
+import {toggleTodoSuccess} from "./toggleTodoAction";
+import {addTodoFail, addTodoStarted, addTodoSuccess} from "./addTodoAction";
+import {loadTodosFail, loadTodosStarted, loadTodosSuccess} from "./loadTodosAction";
 
-export const LOAD_TODOS = 'LOAD_TODOS';
-export const ADD_TODO = 'ADD_TODO';
-export const DELETE_TODO = 'DELETE_TODO';
+export const addTodo = text => dispatch => {
+    dispatch(addTodoStarted());
 
-export const loadTodosAction = () => {
-    return async dispatch => {
-        await axios.get("https://simple-api-todo.herokuapp.com/api/todo")
-            .then(response => {
-                dispatch({
-                    type: LOAD_TODOS,
-                    payload: response.data.data.map(todo => ({
-                        text: todo.text,
-                        id: todo._id,
-                        isDone: todo.isDone
-                    }))
-                })
-            })
-    }
+    axios
+        .post(url, {
+            text,
+            isDone: false
+        })
+        .then(response => {
+            dispatch(addTodoSuccess(response.data))
+        })
+        .catch(error => {
+            dispatch(addTodoFail(error))
+        })
 };
 
-export const addTodoAction = text => {
-    return async dispatch => {
-       await axios.post("https://simple-api-todo.herokuapp.com/api/todo", {text, isDone: false})
-            .then(response => {
-                dispatch({
-                    type: ADD_TODO,
-                    text: text,
-                    isDone: false
-                })
-            })
-    }
+export const loadTodos = () => dispatch => {
+    dispatch(loadTodosStarted());
+
+    axios
+        .get(url)
+        .then(response => {
+            dispatch(loadTodosSuccess(response.data))
+        })
+        .catch(error => {
+            dispatch(loadTodosFail(error))
+        })
 };
 
-export const deleteTodoAction = id => {
-    return dispatch => {
-        axios.delete(`https://simple-api-todo.herokuapp.com/api/todo/${id}`)
-            .then(response => {
-                dispatch({
-                    type: DELETE_TODO,
-                    id: response._id
-                })
-            })
-    }
+export const delTodo = id => dispatch => {
+    dispatch(deleteTodoStarted());
+
+    axios
+        .delete(`${url}/${id}`)
+        .then(response => {
+            dispatch(deleteTodo(id))
+        })
 };
+
+export const toggleTodo = id => dispatch => {
+    axios
+        .put(`${url}/${id}`, {
+        })
+        .then(response => {
+            dispatch(toggleTodoSuccess(response.data));
+        })
+};
+
+

@@ -1,48 +1,54 @@
-import React, {Component} from "react";
+import React, {Component, createRef} from "react";
 import './App.css';
 import {connect} from "react-redux";
+import {addTodo, delTodo, loadTodos, toggleTodo} from "../actions/actionCreators";
 import TodoCollection from "../Components/TodoCollection";
-import {addTodoAction, deleteTodoAction, loadTodosAction} from "../actions/actionCreators";
 
 class App extends Component {
-    onHandleSubmit = e => {
+    constructor(){
+        super();
+        this.textInput = createRef();
+    }
+
+     addTodo = e => {
         e.preventDefault();
-        this.props.addTodoAction(this.props.todos.text);
-        this.props.loadTodosAction()
+        this.props.addTodoAction(this.textInput.current.value)
     };
 
-    getText = e => {
-        this.props.todos.text = e.currentTarget.value;
-        console.log(this.props.todos.text);
-    };
+
+    componentDidMount() {
+        this.props.loadTodosAction();
+    }
 
     render() {
         return (
             <div className="App">
-                <form onSubmit={this.onHandleSubmit}>
-                    <input onChange={this.getText} className="put" type="text"/>
-                    <button>ADD TODO</button>
+                <form onSubmit={this.addTodo}>
+                    <input ref={this.textInput} className="input" type="text"/>
+                    <button className="btn">ADD TODO</button>
+                    <TodoCollection todos={this.props.todos.todos}
+                                    isFetching={this.props.todos.isFetching}
+                                    delTodo={this.props.deleteTodoAction}
+                                    toggleTodo={this.props.toggleTodoAction}
+                    />
                 </form>
-                <TodoCollection todos={this.props.todos}
-                                deleteTodo={this.props.deleteTodoAction}
-                                loadTodos={this.props.loadTodosAction}
-                />
             </div>
         );
     }
 }
 
-const mapStateToProps = store => {
-    console.log(store);
-    return {
-        todos: store.todos,
-    }
-};
 const mapDispatchToProps = dispatch => {
     return {
-        loadTodosAction: () => dispatch(loadTodosAction()),
-        addTodoAction: text => dispatch(addTodoAction(text)),
-        deleteTodoAction: id => dispatch(deleteTodoAction(id)),
+        addTodoAction: text => dispatch(addTodo(text)),
+        deleteTodoAction: id => dispatch(delTodo(id)),
+        loadTodosAction: todos => dispatch(loadTodos(todos)),
+        toggleTodoAction: id => dispatch(toggleTodo(id))
+    }
+};
+
+const mapStateToProps = store => {
+    return {
+        todos: store.todos
     }
 };
 

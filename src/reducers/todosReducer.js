@@ -1,28 +1,71 @@
-import {ADD_TODO, DELETE_TODO, LOAD_TODOS} from "../actions/actionCreators";
+import {
+    ADD_TODO_FAIL,
+    ADD_TODO_STARTED,
+    ADD_TODO_SUCCESS, DELETE_TODO, DELETE_TODO_STARTED,
+    LOAD_TODOS_FAIL,
+    LOAD_TODOS_STARTED,
+    LOAD_TODOS_SUCCESS, TOGGLE_TODO_SUCCESS
+} from "../constants";
 
 export const initialState = {
     todos: [],
-    text: ''
+    isFetching: false,
+    error: null
 };
 
 export function todosReducer(state = initialState, action) {
     switch (action.type) {
-        case LOAD_TODOS:
-            return {...state, todos: action.payload};
-        case ADD_TODO:
-            return {...state, text: action.text, isDone: action.isDone};
+        case ADD_TODO_STARTED:
+            return {
+                ...state,
+                isFetching: true
+            };
+        case ADD_TODO_SUCCESS:
+            return {
+                ...state,
+                isFetching: false,
+                error: null,
+                todos: [...state.todos, action.payload.todo.data]
+            };
+        case ADD_TODO_FAIL:
+            return {
+                ...state,
+                isFetching: false,
+                error: action.payload
+            };
+        case LOAD_TODOS_STARTED:
+            return {
+                ...state,
+                isFetching: true
+            };
+        case LOAD_TODOS_SUCCESS:
+            return {
+                ...state,
+                isFetching: false,
+                todos: action.payload.todos
+            };
+        case LOAD_TODOS_FAIL:
+            return {
+                ...state,
+                isFetching: false,
+                error: action.payload
+            };
+        case DELETE_TODO_STARTED:
+            return {
+                ...state,
+                isFetching: true
+            };
         case DELETE_TODO:
-            return {...state, id: action.id};
+            return {
+                ...state,
+                isFetching: false,
+                todos: state.todos.filter(todo => todo._id !== action.payload.id)
+            };
+        case TOGGLE_TODO_SUCCESS:
+            return {
+                ...state,
+            };
         default:
-            return state;
+            return state
     }
 }
-
-// case TOGGLE_TODO:
-//     return state.map(todo => (todo.id === action.id)
-//         ? {...todo, isDone: !todo.isDone}
-//         : todo
-//     );
-
-// case DELETE_TODO:
-//     return state.filter(todo => todo.id !== action.id);
