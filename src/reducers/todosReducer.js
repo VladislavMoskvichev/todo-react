@@ -64,6 +64,12 @@ export function todosReducer(state = initialState, action) {
         case TOGGLE_TODO_SUCCESS:
             return {
                 ...state,
+                todos: state.todos.map(todo => {
+                    if (todo._id === action.payload.id){
+                        todo.isDone = !todo.isDone
+                    }
+                    return todo
+                })
             };
         default:
             return state

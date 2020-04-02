@@ -12,7 +12,8 @@ class App extends Component {
 
      addTodo = e => {
         e.preventDefault();
-        this.props.addTodoAction(this.textInput.current.value)
+        this.props.addTodoAction(this.textInput.current.value);
+         this.textInput.current.value = '';
     };
 
 

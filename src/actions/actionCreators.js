@@ -45,11 +45,12 @@ export const delTodo = id => dispatch => {
 };
 
 export const toggleTodo = id => dispatch => {
+
     axios
         .put(`${url}/${id}`, {
         })
         .then(response => {
-            dispatch(toggleTodoSuccess(response.data));
+            dispatch(toggleTodoSuccess(response.data.data._id));
         })
 };
 

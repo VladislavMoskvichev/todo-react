@@ -19,7 +19,7 @@ class Todo extends Component {
             <div className="todo-wrap">
                 <li id={this.props.id} className="todo">
                     {this.props.text}
-                    <input ref={this.checkboxInput} onChange={this.toggleTodo} id={this.props.id} type="checkbox"/>
+                    <input ref={this.checkboxInput} checked={this.props.isDone} onChange={this.toggleTodo} id={this.props.id} type="checkbox"/>
                 </li>
                 <div onClick={this.delTodo} id={this.props.id} className="delete-btn">
                     DEL
